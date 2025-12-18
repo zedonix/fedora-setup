@@ -255,7 +255,7 @@ firewall-cmd --permanent --zone=public --add-source=192.168.0.0/24
 firewall-cmd --permanent --zone=public --remove-service=cups
 firewall-cmd --permanent --zone=public --remove-port=631/tcp
 # Create libvirt zone and assign virtual bridge
-firewall-cmd --permanent --new-zone=libvirt
+# firewall-cmd --permanent --new-zone=libvirt
 firewall-cmd --permanent --zone=libvirt --add-interface=virbr0
 # Only allow DHCP and DNS for libvirt guests
 firewall-cmd --permanent --zone=libvirt --add-service=dhcp
@@ -264,7 +264,7 @@ firewall-cmd --permanent --zone=libvirt --add-service=dns
 firewall-cmd --permanent --zone=libvirt --add-masquerade
 # Log all denied packets
 firewall-cmd --set-log-denied=all
-sed -i -E 's/^#?\s*LogDenied=.*/LogDenied=all/' /etc/firewalld/firewalld.conf
+firewall-cmd --permanent --zone=public --add-rich-rule='rule family=ipv4 log prefix="FW-DENY " level=info reject'
 # Remove unused services
 firewall-cmd --permanent --remove-service=dhcpv6-client
 firewall-cmd --reload
