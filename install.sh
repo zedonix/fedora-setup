@@ -231,7 +231,7 @@ echo "GRUB_DISABLE_OS_PROBER=false" >>/etc/default/grub
 sed -i 's/\b\(rhgb\|quiet\)\b//g' /etc/default/grub
 sed -i "s/^\(GRUB_CMDLINE_LINUX=\"[^\"]*\)/\1 $all_params/" /etc/default/grub
 # sed -i 's/^#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
-grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Sudo Configuration
 echo "%wheel ALL=(ALL) ALL" >/etc/sudoers.d/wheel
