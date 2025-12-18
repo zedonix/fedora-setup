@@ -241,7 +241,7 @@ echo 'Defaults env_keep += "SYSTEMD_EDITOR XDG_RUNTIME_DIR WAYLAND_DISPLAY DBUS_
 chmod 440 /etc/sudoers.d/*
 # User setup
 if [[ "$hardware" == "hardware" ]]; then
-  usermod -aG wheel,video,audio,lp,scanner,kvm,libvirt "$username"
+  usermod -aG wheel,video,audio,lp,kvm,libvirt "$username"
 else
   usermod -aG wheel,video,audio,lp,docker "$username"
 fi
@@ -397,7 +397,7 @@ su - piyush -c '
     nixpkgs#javaPackages.compiler.temurin-bin.jre-17
   # nix build nixpkgs#opencode --no-link --no-substitute
 '
-nix profile add nixpkgs#yazi nixpkgs#eza nixpkgs#starship
+nix profile add nixpkgs#yazi nixpkgs#eza nixpkgs#starship nixpkgs#neovim
 
 # npm install -g tree-sitter-cli
 
@@ -407,12 +407,6 @@ nix profile add nixpkgs#yazi nixpkgs#eza nixpkgs#starship
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SYSTEMD=ON -DUSE_BPF_PROC_IMPL=ON -DWITH_BPF=ON
 # cmake --build build --target ananicy-cpp
 # cmake --install build --component Runtime
-
-# neovim
-curl -LO "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz"
-rm -rf /opt/nvim-linux-x86_64
-tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
 
 # Setup gruvbox theme
 THEME_SRC="/home/piyush/Documents/personal/default/GruvboxQT"
