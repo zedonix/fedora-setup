@@ -264,7 +264,7 @@ firewall-cmd --permanent --zone=libvirt --add-service=dns
 firewall-cmd --permanent --zone=libvirt --add-masquerade
 # Log all denied packets
 firewall-cmd --set-log-denied=all
-firewall-cmd --permanent --zone=public --add-rich-rule='rule family=ipv4 log prefix="FW-DENY " level=info reject'
+# firewall-cmd --permanent --zone=public --add-rich-rule='rule family=ipv4 log prefix="FW-DENY " level=info reject'
 # Remove unused services
 firewall-cmd --permanent --remove-service=dhcpv6-client
 firewall-cmd --reload
