@@ -239,9 +239,9 @@ echo "Defaults pwfeedback" >/etc/sudoers.d/pwfeedback
 echo 'Defaults env_keep += "SYSTEMD_EDITOR XDG_RUNTIME_DIR WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS WAYLAND_SOCKET"' >/etc/sudoers.d/wayland
 chmod 440 /etc/sudoers.d/*
 # User setup
-usermod -aG wheel,video,audio,lp,docker "$username"
+usermod -aG wheel,video,audio,docker "$username"
 if [[ "$hardware" == "hardware" ]]; then
-  usermod -aG kvm,libvirt "$username"
+  usermod -aG kvm,libvirt,lp "$username"
 fi
 
 # firewalld setup
