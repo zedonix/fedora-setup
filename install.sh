@@ -6,16 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-# Redirect all output (stdout & stderr) into the user’s home directory log
-# LOGFILE="${HOME}/fedora_setup.log"
-# : >"${LOGFILE}"
-# exec > >(tee -a "$LOGFILE") 2>&1
-
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR"
-
-# Variable set
-username=piyush
 
 # Which type of install?
 # First choice: vm or hardware
@@ -239,9 +231,9 @@ echo "Defaults pwfeedback" >/etc/sudoers.d/pwfeedback
 echo 'Defaults env_keep += "SYSTEMD_EDITOR XDG_RUNTIME_DIR WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS WAYLAND_SOCKET"' >/etc/sudoers.d/wayland
 chmod 440 /etc/sudoers.d/*
 # User setup
-usermod -aG wheel,video,audio,docker "$username"
+usermod -aG wheel,video,audio,docker piyush
 if [[ "$hardware" == "hardware" ]]; then
-  usermod -aG kvm,libvirt,lp "$username"
+  usermod -aG kvm,libvirt,lp piyush
 fi
 
 # firewalld setup
@@ -346,23 +338,23 @@ su - piyush -c '
   docker create --name omni-tools --restart no -p 1024:80 iib0011/omni-tools:latest
   docker create --name bentopdf --restart no -p 1025:8080 bentopdf/bentopdf:latest
   docker create --name convertx --restart no -p 1026:3000 -v ./data:/app/data ghcr.io/c4illin/convertx
-  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-  flatpak override --user --env=GTK_THEME=Adwaita-dark --env=QT_STYLE_OVERRIDE=Adwaita-Dark
+  export XDG_RUNTIME_DIR="/run/user/1000"
+  dbus-run-session -- flatpak override --user --env=GTK_THEME=Adwaita-dark --env=QT_STYLE_OVERRIDE=Adwaita-Dark
 '
 
 if [[ "$hardware" == "hardware" ]]; then
   su - piyush -c '
-    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-    flatpak install -y flathub com.github.wwmm.easyeffects
-    flatpak install -y flathub no.mifi.losslesscut
+    export XDG_RUNTIME_DIR="/run/user/1000"
+    dbus-run-session -- flatpak install -y flathub com.github.wwmm.easyeffects
+    dbus-run-session -- flatpak install -y flathub no.mifi.losslesscut
     # flatpak install -y flathub com.obsproject.Studio
   '
 fi
 if [[ "$extra" == "laptop" ]]; then
   su - piyush -c '
-    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-    flatpak install -y flathub com.github.d4nj1.tlpui
-    flatpak install -y nl.brixit.powersupply
+    export XDG_RUNTIME_DIR="/run/user/1000"
+    dbus-run-session -- flatpak install -y flathub com.github.d4nj1.tlpui
+    dbus-run-session -- flatpak install -y nl.brixit.powersupply
   '
 fi
 
