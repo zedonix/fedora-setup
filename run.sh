@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
+echo "Choose one:"
+select hardware in "vm" "hardware"; do
+  [[ -n $hardware ]] && break
+  echo "Invalid choice. Please select 1 for vm or 2 for hardware."
+done
+
+# extra choice: laptop or bluetooth or none
+if [[ "$hardware" == "hardware" ]]; then
+  echo "Choose one:"
+  select extra in "laptop" "bluetooth" "none"; do
+    [[ -n $extra ]] && break
+    echo "Invalid choice."
+  done
+else
+  extra="none"
+fi
+
 kvantummanager --set Gruvbox
 gsettings set org.gnome.desktop.interface gtk-theme 'Gruvbox-Material-Dark'
 gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
@@ -45,8 +62,18 @@ cp -f ~/Documents/personal/default/dotfiles/book* "$dir/bookmarkbackups/"
 # EOF
 # sudo systemctl restart NetworkManager
 
+flatpak override --user --env=GTK_THEME=Adwaita-dark --env=QT_STYLE_OVERRIDE=Adwaita-Dark
+if [[ "$hardware" == "hardware" ]]; then
+  flatpak install -y flathub com.github.wwmm.easyeffects
+  flatpak install -y flathub no.mifi.losslesscut
+  # flatpak install -y flathub com.obsproject.Studio
+fi
+if [[ "$extra" == "laptop" ]]; then
+  flatpak install -y flathub com.github.d4nj1.tlpui
+  flatpak install -y nl.brixit.powersupply
+fi
+
 bemoji --download all &
-# Nvim tools install
 foot -e nvim +MasonToolsInstall &
 foot -e sudo nvim +MasonToolsInstall &
 foot -e tmux &
