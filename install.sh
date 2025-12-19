@@ -394,6 +394,7 @@ nix profile add \
   nixpkgs#javaPackages.compiler.temurin-bin.jre-17 \
   nixpkgs#yazi \
   nixpkgs#eza \
+  nixpkgs#unp \
   nixpkgs#starship \
   nixpkgs#poweralertd
 # nix build nixpkgs#opencode --no-link --no-substitute
