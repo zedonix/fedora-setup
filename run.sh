@@ -135,3 +135,5 @@ else
   echo "libvirt-daemon not installed; skip configuration" >&2
   exit 1
 fi
+
+dnf autoremove
