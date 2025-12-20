@@ -448,5 +448,4 @@ systemctl mask systemd-rfkill systemd-rfkill.socket
 systemctl disable NetworkManager-wait-online.service
 
 # cleanup
-dnf remove -y plymouth cmake make pkgconf-pkg-config gcc-c++ systemd-devel libbpf-devel elfutils-libelf-devel clang llvm kernel-headers bpftool
-dnf autoremove
+dnf remove -y plymouth cmake make gcc-c++ systemd-devel libbpf-devel elfutils-libelf-devel clang llvm kernel-headers bpftool
