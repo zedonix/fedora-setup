@@ -364,6 +364,7 @@ nix profile add \
   nixpkgs#wayland-pipewire-idle-inhibit \
   nixpkgs#networkmanager_dmenu \
   nixpkgs#newsraft \
+  nixpkgs#caligula \
   nixpkgs#opencode \
   nixpkgs#javaPackages.compiler.temurin-bin.jre-17 \
   nixpkgs#yazi \
