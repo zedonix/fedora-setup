@@ -282,9 +282,6 @@ net.core.bpf_jit_harden = 2
 EOF
 sysctl --system
 
-# A anacron job
-echo "30 5 trash-empty-job runuser -u piyush -- /usr/bin/trash-empty" >>/etc/anacrontab
-
 flatpak --system remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak --system install -y org.gtk.Gtk3theme.Adwaita-dark
 systemctl start docker.service
