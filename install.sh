@@ -351,7 +351,6 @@ systemctl restart nix-daemon
 
 nix profile add \
   nixpkgs#hyprpicker \
-  nixpkgs#lxsession \
   nixpkgs#bemoji \
   nixpkgs#lazydocker \
   nixpkgs#upscaler \
