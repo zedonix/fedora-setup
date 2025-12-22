@@ -277,7 +277,7 @@ net.ipv4.conf.default.rp_filter = 1
 net.ipv4.conf.all.send_redirects = 0
 net.ipv4.conf.default.send_redirects = 0
 # Enable IP forwarding for NAT
-net.ipv4.ip_forward = 1
+# net.ipv4.ip_forward = 1
 
 # kernel hardening
 kernel.kptr_restrict = 2
