@@ -360,6 +360,7 @@ systemctl restart nix-daemon
 su - piyush -c '
   nix profile add \
     nixpkgs#hyprpicker \
+    nixpkgs#tenacity \
     nixpkgs#bemoji \
     nixpkgs#lazydocker \
     nixpkgs#upscaler \
