@@ -353,6 +353,8 @@ su - piyush -c '
   docker create --name bentopdf --restart no -p 1025:8080 bentopdf/bentopdf:latest
   docker create --name convertx --restart no -p 1026:3000 -v ./data:/app/data ghcr.io/c4illin/convertx
 '
+rm /usr/share/fonts/google-noto-color-emoji-fonts/Noto-COLRv1.ttf
+wget https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf -O /usr/share/fonts/google-noto-color-emoji-fonts/NotoColorEmoji.ttf
 
 # Root dots
 mkdir -p ~/.config ~/.local/state/bash ~/.local/state/zsh
