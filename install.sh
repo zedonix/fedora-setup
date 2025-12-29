@@ -304,6 +304,7 @@ su - piyush -c '
 '
 rm /usr/share/fonts/google-noto-color-emoji-fonts/Noto-COLRv1.ttf
 wget https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf -O /usr/share/fonts/google-noto-color-emoji-fonts/NotoColorEmoji.ttf
+echo "after this?"
 
 # Root dots
 mkdir -p ~/.config ~/.local/state/bash ~/.local/state/zsh
@@ -315,7 +316,6 @@ ln -sf /home/piyush/Documents/personal/default/dotfiles/.zshrc ~/.zshrc
 ln -sf /home/piyush/Documents/personal/default/dotfiles/.config/starship.toml ~/.config
 ln -sf /home/piyush/Documents/personal/default/dotfiles/.config/nvim/ ~/.config
 
-source ~/.bashrc
 systemctl restart nix-daemon
 
 su - piyush -c '
