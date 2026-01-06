@@ -65,6 +65,13 @@ cp -f ~/Documents/personal/default/dotfiles/book* "$dir/bookmarkbackups/"
 flatpak override --user --env=GTK_THEME=Adwaita-dark --env=QT_STYLE_OVERRIDE=Adwaita-Dark
 if [[ "$hardware" == "hardware" ]]; then
   flatpak install -y flathub com.github.wwmm.easyeffects
+  sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS
+  sudo waydroid shell -- sh -c "pm uninstall --user 0 com.google.android.googlequicksearchbox"
+  # curl -fOL --retry 3 --retry-delay 3 "https://github.com/Xtr126/cage-xtmapper/releases/latest/download/cage-xtmapper-v0.2.0.tar"
+  # tar xvf cage-xtmapper-v0.2.0.tar
+  # cd usr/local/bin
+  # install -Dm755 ./cage_xtmapper /usr/local/bin/
+  # install -Dm755 ./cage_xtmapper.sh /usr/local/bin/
   # sudo XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" WAYLAND_DISPLAY="$WAYLAND_DISPLAY" waydroid shell -- sh /sdcard/Android/data/xtr.keymapper/files/xtMapper.sh --wayland-client
   cd ~/Downloads
   REPO="Xtr126/XtMapper"

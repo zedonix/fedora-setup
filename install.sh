@@ -402,13 +402,6 @@ mkdir -p /etc/systemd/zram-generator.conf.d
 # rfkill unblock bluetooth
 # modprobe btusb || true
 if [[ "$hardware" == "hardware" ]]; then
-  waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS
-  waydroid shell -- sh -c "pm uninstall --user 0 com.google.android.googlequicksearchbox"
-  # curl -fOL --retry 3 --retry-delay 3 "https://github.com/Xtr126/cage-xtmapper/releases/latest/download/cage-xtmapper-v0.2.0.tar"
-  # tar xvf cage-xtmapper-v0.2.0.tar
-  # cd usr/local/bin
-  # install -Dm755 ./cage_xtmapper /usr/local/bin/
-  # install -Dm755 ./cage_xtmapper.sh /usr/local/bin/
   systemctl enable fstrim.timer acpid libvirtd.socket cups ipp-usb docker.socket
   systemctl disable dnsmasq
 fi
