@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "This script must be run as root"
@@ -335,8 +335,9 @@ nix profile add nixpkgs#yazi nixpkgs#starship nixpkgs#eza
 
 REPO="jgraph/drawio-desktop"
 curl -s "https://api.github.com/repos/$REPO/releases/latest" |
-  grep -oE 'https://[^"]+x86_64[^"]+\.rpm' |
-  xargs -n 1 wget
+  jq -r '.assets[].browser_download_url' |
+  grep -E 'x86_64.*\.rpm$' |
+  xargs -n1 wget
 
 git clone --depth 1 https://gitlab.com/ananicy-cpp/ananicy-cpp.git
 cd ananicy-cpp
