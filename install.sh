@@ -70,7 +70,7 @@ dnf upgrade --refresh
 ## Adding repos
 dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
 dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-# dnf -y copr enable erizur/firefox-esr
+dnf -y copr enable erizur/firefox-esr
 dnf makecache
 
 dnf config-manager setopt fedora-cisco-openh264.enabled=0 # cuz fuck cisco
@@ -324,7 +324,6 @@ sudo -iu piyush nix profile add \
   nixpkgs#wl-clip-persist \
   nixpkgs#onlyoffice-desktopeditors \
   nixpkgs#networkmanager_dmenu \
-  nixpkgs#firefox-esr \
   nixpkgs#swappy \
   nixpkgs#caligula \
   nixpkgs#opencode \
