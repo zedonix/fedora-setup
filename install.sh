@@ -284,7 +284,7 @@ su - piyush -c '
     ln -sf $link ~/.local/bin/
   done
   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-  zoxide add /home/piyush/Documents/projects/default/debsetup
+  zoxide add /home/piyush/Documents/projects/default/fedsetup
   source ~/.bashrc
 
   # Iosevka
