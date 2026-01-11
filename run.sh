@@ -73,65 +73,64 @@ if [[ "$extra" == "laptop" ]]; then
   flatpak install -y nl.brixit.powersupply
 fi
 
-bemoji --download all &
 foot -e nvim +MasonToolsInstall &
 foot -e sudo nvim +MasonToolsInstall &
-foot -e tmux &
+# foot -e tmux &
 
-# Libvirt setup
-NEW="/home/piyush/Documents/libvirt"
-TMP="/tmp/default-pool.xml"
-
-# wrapper so we don't accidentally pass a quoted command string to sudo
-virsh_connect() { sudo virsh --connect qemu:///system "$@"; }
-
-if rpm -q libvirt-daemon &>/dev/null; then
-  # ensure default network is autostarted if present; ignore errors if already set
-  virsh_connect net-autostart default 2>/dev/null || true
-  virsh_connect net-start default 2>/dev/null || true
-
-  sudo mkdir -p "$NEW"
-  sudo chown -R root:libvirt "$NEW"
-  sudo chmod -R 2775 "$NEW"
-
-  # remove any existing pools that point to this path (except keep 'default' for now)
-  while IFS= read -r p; do
-    [ -z "$p" ] && continue
-    if virsh_connect pool-dumpxml "$p" 2>/dev/null | grep -q "<path>${NEW}</path>"; then
-      if [ "$p" != "default" ]; then
-        virsh_connect pool-destroy "$p" || true
-        virsh_connect pool-undefine "$p" || true
-      fi
-    fi
-  done < <(virsh_connect pool-list --all --name 2>/dev/null || true)
-
-  # if a 'default' storage pool exists, replace it with our path
-  if virsh_connect pool-list --all 2>/dev/null | awk 'NR>2{print $1}' | grep -qx default; then
-    virsh_connect pool-destroy default 2>/dev/null || true
-    virsh_connect pool-undefine default 2>/dev/null || true
-  fi
-
-  # write pool XML with variable expansion
-  cat <<EOF | sudo tee "$TMP" >/dev/null
-<pool type='dir'>
-  <name>default</name>
-  <target><path>${NEW}</path></target>
-</pool>
-EOF
-
-  # define, start, refresh and autostart the pool
-  virsh_connect pool-define "$TMP" || true
-  virsh_connect pool-build default 2>/dev/null || true
-  virsh_connect pool-start default 2>/dev/null || true
-  virsh_connect pool-refresh default 2>/dev/null || true
-  virsh_connect pool-autostart default 2>/dev/null || true
-
-  # ensure files under NEW/images are world-readable where appropriate
-  sudo find "${NEW}" -type d -exec sudo chmod 2775 {} + || true
-  sudo find "${NEW}" -type f -exec sudo chmod 0644 {} + || true
-
-  echo "Libvirt pool configured at ${NEW}"
-else
-  echo "libvirt-daemon not installed; skip configuration" >&2
-  exit 1
-fi
+# # Libvirt setup
+# NEW="/home/piyush/Documents/libvirt"
+# TMP="/tmp/default-pool.xml"
+#
+# # wrapper so we don't accidentally pass a quoted command string to sudo
+# virsh_connect() { sudo virsh --connect qemu:///system "$@"; }
+#
+# if rpm -q libvirt-daemon &>/dev/null; then
+#   # ensure default network is autostarted if present; ignore errors if already set
+#   virsh_connect net-autostart default 2>/dev/null || true
+#   virsh_connect net-start default 2>/dev/null || true
+#
+#   sudo mkdir -p "$NEW"
+#   sudo chown -R root:libvirt "$NEW"
+#   sudo chmod -R 2775 "$NEW"
+#
+#   # remove any existing pools that point to this path (except keep 'default' for now)
+#   while IFS= read -r p; do
+#     [ -z "$p" ] && continue
+#     if virsh_connect pool-dumpxml "$p" 2>/dev/null | grep -q "<path>${NEW}</path>"; then
+#       if [ "$p" != "default" ]; then
+#         virsh_connect pool-destroy "$p" || true
+#         virsh_connect pool-undefine "$p" || true
+#       fi
+#     fi
+#   done < <(virsh_connect pool-list --all --name 2>/dev/null || true)
+#
+#   # if a 'default' storage pool exists, replace it with our path
+#   if virsh_connect pool-list --all 2>/dev/null | awk 'NR>2{print $1}' | grep -qx default; then
+#     virsh_connect pool-destroy default 2>/dev/null || true
+#     virsh_connect pool-undefine default 2>/dev/null || true
+#   fi
+#
+#   # write pool XML with variable expansion
+#   cat <<EOF | sudo tee "$TMP" >/dev/null
+# <pool type='dir'>
+#   <name>default</name>
+#   <target><path>${NEW}</path></target>
+# </pool>
+# EOF
+#
+#   # define, start, refresh and autostart the pool
+#   virsh_connect pool-define "$TMP" || true
+#   virsh_connect pool-build default 2>/dev/null || true
+#   virsh_connect pool-start default 2>/dev/null || true
+#   virsh_connect pool-refresh default 2>/dev/null || true
+#   virsh_connect pool-autostart default 2>/dev/null || true
+#
+#   # ensure files under NEW/images are world-readable where appropriate
+#   sudo find "${NEW}" -type d -exec sudo chmod 2775 {} + || true
+#   sudo find "${NEW}" -type f -exec sudo chmod 0644 {} + || true
+#
+#   echo "Libvirt pool configured at ${NEW}"
+# else
+#   echo "libvirt-daemon not installed; skip configuration" >&2
+#   exit 1
+# fi
