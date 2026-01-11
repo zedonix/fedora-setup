@@ -70,7 +70,7 @@ dnf upgrade --refresh
 ## Adding repos
 dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
 dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-dnf -y copr enable erizur/firefox-esr
+# dnf -y copr enable erizur/firefox-esr
 dnf makecache
 
 dnf config-manager setopt fedora-cisco-openh264.enabled=0 # cuz fuck cisco
@@ -327,6 +327,7 @@ ln -sf /home/piyush/Documents/projects/default/dotfiles/.config/nvim/ ~/.config
 systemctl restart nix-daemon
 
 sudo -iu piyush nix profile add \
+  nixpkgs#firefox-esr \
   nixpkgs#hyprpicker \
   nixpkgs#bemoji \
   nixpkgs#lazydocker \
@@ -342,13 +343,13 @@ sudo -iu piyush nix profile add \
   nixpkgs#poweralertd
 # sudo -iu piyush nix build nixpkgs#opencode --no-link --no-substitute
 sudo -iu piyush env NIXPKGS_ALLOW_UNFREE=1 nix profile add nixpkgs#drawio --impure
-nix profile add nixpkgs#yazi nixpkgs#starship nixpkgs#eza
+nix profile add nixpkgs#yazi nixpkgs#starship nixpkgs#eza nixpkgs#ananicy-cpp
 
-git clone --depth 1 https://gitlab.com/ananicy-cpp/ananicy-cpp.git
-cd ananicy-cpp
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SYSTEMD=ON -DUSE_BPF_PROC_IMPL=ON -DWITH_BPF=ON
-cmake --build build --target ananicy-cpp
-cmake --install build --component Runtime
+# git clone --depth 1 https://gitlab.com/ananicy-cpp/ananicy-cpp.git
+# cd ananicy-cpp
+# cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SYSTEMD=ON -DUSE_BPF_PROC_IMPL=ON -DWITH_BPF=ON
+# cmake --build build --target ananicy-cpp
+# cmake --install build --component Runtime
 
 # Setup gruvbox theme
 THEME_SRC="/home/piyush/Documents/projects/default/GruvboxTheme"
