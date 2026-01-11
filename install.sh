@@ -225,9 +225,17 @@ firewall-cmd --permanent --zone=work --remove-service=mdns
 # firewall-cmd --permanent --remove-service=dhcpv6-client
 firewall-cmd --reload
 systemctl enable firewalld
+
 # Bind dnsmasq to virbr0 only
 sed -i -E 's/^#?\s*interface=.*/interface=virbr0/; s/^#?\s*bind-interfaces.*/bind-interfaces/' /etc/dnsmasq.conf
 echo 'ListenAddress 127.0.0.1' >>/etc/ssh/sshd_config
+
+# disable llmnr
+mkdir -p /etc/systemd/resolved.conf.d
+tee /etc/systemd/resolved.conf.d/disable-llmnr.conf >/dev/null <<'EOF'
+[Resolve]
+LLMNR=no
+EOF
 
 tee /etc/sysctl.d/99-hardening.conf >/dev/null <<'EOF'
 # networking
