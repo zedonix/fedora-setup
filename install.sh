@@ -66,11 +66,10 @@ gpgcheck=True
 EOF
 dnf clean all
 dnf makecache
-dnf upgrade --refresh
+dnf upgrade -y --refresh
 ## Adding repos
 dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
 dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-dnf -y copr enable erizur/firefox-esr
 dnf makecache
 
 dnf config-manager setopt fedora-cisco-openh264.enabled=0 # cuz fuck cisco
@@ -192,11 +191,12 @@ echo "Defaults pwfeedback" >/etc/sudoers.d/pwfeedback
 echo 'Defaults env_keep += "SYSTEMD_EDITOR XDG_RUNTIME_DIR WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS WAYLAND_SOCKET"' >/etc/sudoers.d/wayland
 chmod 440 /etc/sudoers.d/*
 # User setup
-useradd -m piyush
-usermod -aG wheel,video,audio,docker piyush
+usermod -aG wheel,video,audio,docker
 if [[ "$hardware" == "hardware" ]]; then
-  usermod -aG kvm,libvirt,lp piyush
+  usermod -aG kvm,libvirt,lp
 fi
+chown root:libvirt /var/lib/libvirt/images
+chmod 2775 /var/lib/libvirt/images
 
 # firewalld setup
 firewall-cmd --permanent --zone=home --add-source=192.168.0.0/24
@@ -223,8 +223,6 @@ firewall-cmd --permanent --zone=FedoraWorkstation --remove-port=1025-65535/udp
 firewall-cmd --permanent --zone=work --remove-service=mdns
 # firewall-cmd --set-log-denied=all
 # firewall-cmd --permanent --remove-service=dhcpv6-client
-firewall-cmd --reload
-systemctl enable firewalld
 
 # Bind dnsmasq to virbr0 only
 sed -i -E 's/^#?\s*interface=.*/interface=virbr0/; s/^#?\s*bind-interfaces.*/bind-interfaces/' /etc/dnsmasq.conf
@@ -255,7 +253,6 @@ fs.protected_fifos = 2
 # bpf jit harden (if present)
 net.core.bpf_jit_harden = 2
 EOF
-sysctl --system
 
 flatpak --system remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak --system install -y org.gtk.Gtk3theme.Adwaita-dark
@@ -295,6 +292,7 @@ su - piyush -c '
     ln -sf $link ~/.local/bin/
   done
   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+  /home/piyush/Documents/projects/default/dotfiles/.config/tmux/plugins/tpm/scripts/install_plugins.sh
   zoxide add /home/piyush/Documents/projects/default/fedsetup
   source ~/.bashrc
 
@@ -324,9 +322,11 @@ ln -sf /home/piyush/Documents/projects/default/dotfiles/.zshrc ~/.zshrc
 ln -sf /home/piyush/Documents/projects/default/dotfiles/.config/starship.toml ~/.config
 ln -sf /home/piyush/Documents/projects/default/dotfiles/.config/nvim/ ~/.config
 
+# nix registry remove nixpkgs
+# nix registry add nixpkgs github:NixOS/nixpkgs/nixos-25.11
 systemctl restart nix-daemon
-
 sudo -iu piyush nix profile add \
+  nixpkgs#firefox-esr \
   nixpkgs#hyprpicker \
   nixpkgs#bemoji \
   nixpkgs#lazydocker \
@@ -343,6 +343,8 @@ sudo -iu piyush nix profile add \
 # sudo -iu piyush nix build nixpkgs#opencode --no-link --no-substitute
 sudo -iu piyush env NIXPKGS_ALLOW_UNFREE=1 nix profile add nixpkgs#drawio --impure
 nix profile add nixpkgs#yazi nixpkgs#starship nixpkgs#eza
+
+sudo -iu piyush bemoji --download all
 
 git clone --depth 1 https://gitlab.com/ananicy-cpp/ananicy-cpp.git
 cd ananicy-cpp
@@ -425,7 +427,7 @@ fi
 if [[ "$extra" == "laptop" ]]; then
   systemctl enable tlp
 fi
-systemctl enable NetworkManager NetworkManager-dispatcher ananicy-cpp nix-daemon
+systemctl enable NetworkManager NetworkManager-dispatcher ananicy-cpp nix-daemon firewalld
 systemctl mask systemd-rfkill systemd-rfkill.socket
 systemctl disable NetworkManager-wait-online.service
 
