@@ -342,6 +342,7 @@ sudo -iu piyush nix profile add \
   nixpkgs#upscaler \
   nixpkgs#texlab \
   nixpkgs#lua-language-server \
+  nixpkgs#checkstyle \
   nixpkgs#wl-clip-persist
 
 if [[ "$extra" == "laptop" ]]; then
