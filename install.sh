@@ -210,9 +210,9 @@ chmod 440 /etc/sudoers.d/*
 usermod -aG video,audio,docker piyush
 if [[ "$hardware" == "hardware" ]]; then
   usermod -aG kvm,libvirt,lp piyush
+  chown root:libvirt /var/lib/libvirt/images
+  chmod 2775 /var/lib/libvirt/images
 fi
-chown root:libvirt /var/lib/libvirt/images
-chmod 2775 /var/lib/libvirt/images
 
 # firewalld setup
 firewall-cmd --permanent --zone=home --add-source=192.168.0.0/24
